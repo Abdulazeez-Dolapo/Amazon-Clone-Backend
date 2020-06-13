@@ -1,16 +1,17 @@
 const router = require("express").Router()
-const Category = require("../models/category")
+const Owner = require("../models/owner")
 
-router.post("/categories", async (req, res) => {
+router.post("/owner", async (req, res) => {
 	try {
-		const category = new Category()
-		category.type = req.body.type
+		let owner = new Owner()
+		owner.name = req.body.name
+		owner.about = req.body.about
 
-		await category.save()
+		await owner.save()
 
 		res.json({
 			success: true,
-			message: "Successfully created a new category",
+			message: "Successfully created a new owner",
 		})
 	} catch (error) {
 		res.status(500).json({
@@ -20,12 +21,12 @@ router.post("/categories", async (req, res) => {
 	}
 })
 
-router.get("/categories", async (req, res) => {
+router.get("/owners", async (req, res) => {
 	try {
-		let categories = await Category.find()
+		let owners = await Owner.find()
 		res.json({
 			success: true,
-			categories,
+			owners,
 		})
 	} catch (error) {
 		res.status(500).json({
