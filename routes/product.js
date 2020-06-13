@@ -2,7 +2,8 @@ const router = require("express").Router()
 const Product = require("../models/product")
 const upload = require("../middlewares/upload-photo")
 
-router.post("/products", upload.single("photo"), async (req, res) => {
+// Create a new product
+router.post("/product", upload.single("photo"), async (req, res) => {
 	try {
 		let newProduct = new Product()
 		newProduct.title = req.body.title
@@ -21,6 +22,67 @@ router.post("/products", upload.single("photo"), async (req, res) => {
 	} catch (error) {
 		res.status(500).json({
 			status: false,
+			message: error.message,
+		})
+	}
+})
+
+// Get all products
+router.get("/products", async (req, res) => {
+	try {
+		let products = await Product.find()
+		res.json({
+			success: true,
+			products,
+		})
+	} catch (error) {
+		res.status(500).json({
+			success: false,
+			message: error.message,
+		})
+	}
+})
+
+// Get a single product
+router.get("/product/:id", async (req, res) => {
+	try {
+		let product = await Product.findOne({ _id: req.params.id })
+		res.json({
+			success: true,
+			product,
+		})
+	} catch (error) {
+		res.status(500).json({
+			success: false,
+			message: error.message,
+		})
+	}
+})
+
+// Update a product
+router.put("/product/:id", upload.single("photo"), async (req, res) => {
+	try {
+		let product = await Product.findOneAndUpdate(
+			{ _id: req.params.id },
+			{
+				$set: {
+					title: req.body.title,
+					description: req.body.description,
+					photo: req.file.location,
+					price: req.body.price,
+					owner: req.body.ownerID,
+					category: req.body.categoryID,
+				},
+			},
+			{ upsert: true }
+		)
+		res.json({
+			success: true,
+			product,
+		})
+	} catch (error) {
+		res.status(500).json({
+			success: false,
 			message: error.message,
 		})
 	}

@@ -1,6 +1,7 @@
 const router = require("express").Router()
 const Owner = require("../models/owner")
 
+// Create a new owner
 router.post("/owner", async (req, res) => {
 	try {
 		let owner = new Owner()
@@ -21,6 +22,7 @@ router.post("/owner", async (req, res) => {
 	}
 })
 
+// Get all owners
 router.get("/owners", async (req, res) => {
 	try {
 		let owners = await Owner.find()
