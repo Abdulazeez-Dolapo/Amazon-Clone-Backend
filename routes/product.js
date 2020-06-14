@@ -62,7 +62,7 @@ router.get("/product/:id", async (req, res) => {
 // Update a product
 router.put("/product/:id", upload.single("photo"), async (req, res) => {
 	try {
-		let product = await Product.findOneAndUpdate(
+		let updatedProduct = await Product.findOneAndUpdate(
 			{ _id: req.params.id },
 			{
 				$set: {
@@ -78,8 +78,29 @@ router.put("/product/:id", upload.single("photo"), async (req, res) => {
 		)
 		res.json({
 			success: true,
-			product,
+			product: updatedProduct,
 		})
+	} catch (error) {
+		res.status(500).json({
+			success: false,
+			message: error.message,
+		})
+	}
+})
+
+// Delete a product
+router.delete("/product/:id", async (req, res) => {
+	try {
+		let deletedProduct = await Product.findOneAndDelete({
+			_id: req.params.id,
+		})
+
+		if (deletedProduct) {
+			res.json({
+				success: true,
+				message: "Product successfully deleted",
+			})
+		}
 	} catch (error) {
 		res.status(500).json({
 			success: false,
