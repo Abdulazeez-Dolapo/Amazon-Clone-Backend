@@ -3,6 +3,7 @@ const express = require("express")
 const morgan = require("morgan")
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
+const cors = require("cors")
 
 const User = require("./models/user")
 const productRoutes = require("./routes/product")
@@ -12,6 +13,7 @@ const ownerRoutes = require("./routes/owner")
 const app = express()
 
 // Middlewares
+app.use(cors())
 app.use(morgan("dev"))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())

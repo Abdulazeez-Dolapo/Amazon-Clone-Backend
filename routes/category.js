@@ -2,7 +2,7 @@ const router = require("express").Router()
 const Category = require("../models/category")
 
 // Create a new category
-router.post("/categories", async (req, res) => {
+router.post("/category", async (req, res) => {
 	try {
 		const category = new Category()
 		category.type = req.body.type
